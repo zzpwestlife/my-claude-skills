@@ -16,7 +16,7 @@ Extract Twitter/X articles and convert to Feishu-compatible Word documents with 
 
 **Installation:**
 ```bash
-npx skills add <your-username>/my-claude-skills/twitter-to-feishu
+npx skills add zzpwestlife/my-claude-skills/twitter-to-feishu
 ```
 
 [View Documentation](twitter-to-feishu/README.md)
@@ -29,7 +29,7 @@ npx skills add <your-username>/my-claude-skills/twitter-to-feishu
 
 ```bash
 # Add this marketplace
-claude plugin marketplace add <your-username>/my-claude-skills
+claude plugin marketplace add zzpwestlife/my-claude-skills
 
 # Install a specific skill
 npx skills add twitter-to-feishu@my-claude-skills
@@ -40,7 +40,7 @@ npx skills add twitter-to-feishu@my-claude-skills
 Each skill can also be installed directly:
 
 ```bash
-npx skills add <your-username>/my-claude-skills/twitter-to-feishu
+npx skills add zzpwestlife/my-claude-skills/twitter-to-feishu
 ```
 
 ## 📁 Repository Structure
