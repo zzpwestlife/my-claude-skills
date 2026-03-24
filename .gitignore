@@ -29,3 +29,4 @@ ENV/
 # Temporary files
 *.tmp
 .cache/
+/weixin-articles

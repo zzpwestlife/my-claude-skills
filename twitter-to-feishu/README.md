@@ -23,7 +23,7 @@ claude skill install twitter-to-feishu.skill
 ### 方式 2：从 GitHub 安装（如果发布到 GitHub）
 
 ```bash
-npx skills add <your-github-username>/twitter-to-feishu
+npx skills add zzpwestlife/twitter-to-feishu
 ```
 
 ## 前置要求
