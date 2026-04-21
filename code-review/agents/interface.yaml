@@ -1,0 +1,49 @@
+skill:
+  name: code-review
+  version: 1.0.0
+  language: en
+
+interface:
+  display_name: Code Review Assistant
+  short_description: Review existing code and provide actionable quality feedback
+  default_prompt: Use code-review to analyze code quality, correctness, security, and maintainability.
+
+metadata:
+  author: Team AI Tools
+  owner: engineering-team
+  created_date: 2024-01-15
+  review_cadence: quarterly
+  lifecycle_state: experimental
+
+compatibility:
+  canonical_format: agent-skills
+  adapter_targets:
+    - openai
+    - claude
+    - generic
+  activation:
+    mode: manual
+    paths: []
+  execution:
+    context: inline
+    shell: bash
+  trust:
+    source_tier: local
+    remote_inline_execution: forbid
+    remote_metadata_policy: allow-metadata-only
+  degradation:
+    openai: metadata-adapter
+    claude: neutral-source-plus-adapter
+    generic: neutral-source
+
+trust_boundaries:
+  - Reads code from user input only
+  - No external API calls
+  - No code execution
+
+maturity:
+  current: experimental
+  target: production
+  expectations:
+    - trigger_precision: 0.95
+    - output_quality_score: 0.85
