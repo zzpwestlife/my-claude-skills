@@ -1,0 +1,27 @@
+{
+  "completed_count": 6,
+  "hash_to_file": {
+    "313b858424d5f504816ba7a1d06c1145fd19ccfc7d10eeda6b2685fda496800e": "images/313b858424d5f504.img",
+    "3e6faaa60e2d91f8a6c58524d3a37f5b68d23d617a96ea4f6985a8078b5185f8": "images/3e6faaa60e2d91f8.img",
+    "5e3b2c8d99767812afe4d8e61e0f0a4ddc6a7042e1910fe4446d0795bf4a6ca7": "images/5e3b2c8d99767812.img",
+    "86aa91f1a841f2dc9c6cae3fa292036593caeb012a29475eb83df99a0900fee4": "images/86aa91f1a841f2dc.png",
+    "d6b5388eaa27664654c4bd40d4c50a98a6a9d28c8b21c582f90d7d35147dcd04": "images/d6b5388eaa276646.img",
+    "e4ac393345addd22ab471d9037a90fcfd8e5336b1d29c459757b5667eab9ba38": "images/e4ac393345addd22.png"
+  },
+  "url_status": {
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJ0lEQVR4AUyJgQkAAAjCoP9v9QVjYWAwWG4k+XGOP3qtnQa9tdNgAQAA///kARRZAAAABklEQVQDANSVVUfL+EKZAAAAAElFTkSuQmCC": "done",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJklEQVR4AYSJwQkAAAgCof1ndQXjwqBfgnB6JclbJ+zguMs4+n0NAAD//+a+cRYAAAAGSURBVAMA0WVVR0niwXsAAAAASUVORK5CYII=": "done",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAABCAYAAABOgffqAAAAKElEQVR4AbyNsQkAAAzCoP/fmhdaOggd6qogBBFSQCvL6t0cJ7+fawAAAP//LcnaFgAAAAZJREFUAwB9A7ayuoF26AAAAABJRU5ErkJggg==": "done",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAABCAYAAACG7R08AAAAMElEQVR4AbyNSwoAAAQFy/3P+q5AI8pGWVFT83xikrzxKnJpzi7ODcxdMnz35r/NAwAA//89wgBVAAAABklEQVQDAAOK8KsdzcELAAAAAElFTkSuQmCC": "done",
+    "https://static001.geekbang.org/resource/image/13/49/1399yy78f7b827f2e0ca6d208e739f49.png": "done",
+    "https://static001.geekbang.org/resource/image/cc/ff/ccd9509c61b46cbf1a0be5b67fa623ff.png": "done"
+  },
+  "url_to_file": {
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJ0lEQVR4AUyJgQkAAAjCoP9v9QVjYWAwWG4k+XGOP3qtnQa9tdNgAQAA///kARRZAAAABklEQVQDANSVVUfL+EKZAAAAAElFTkSuQmCC": "images/3e6faaa60e2d91f8.img",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJklEQVR4AYSJwQkAAAgCof1ndQXjwqBfgnB6JclbJ+zguMs4+n0NAAD//+a+cRYAAAAGSURBVAMA0WVVR0niwXsAAAAASUVORK5CYII=": "images/d6b5388eaa276646.img",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAABCAYAAABOgffqAAAAKElEQVR4AbyNsQkAAAzCoP/fmhdaOggd6qogBBFSQCvL6t0cJ7+fawAAAP//LcnaFgAAAAZJREFUAwB9A7ayuoF26AAAAABJRU5ErkJggg==": "images/313b858424d5f504.img",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAABCAYAAACG7R08AAAAMElEQVR4AbyNSwoAAAQFy/3P+q5AI8pGWVFT83xikrzxKnJpzi7ODcxdMnz35r/NAwAA//89wgBVAAAABklEQVQDAAOK8KsdzcELAAAAAElFTkSuQmCC": "images/5e3b2c8d99767812.img",
+    "https://static001.geekbang.org/resource/image/13/49/1399yy78f7b827f2e0ca6d208e739f49.png": "images/86aa91f1a841f2dc.png",
+    "https://static001.geekbang.org/resource/image/cc/ff/ccd9509c61b46cbf1a0be5b67fa623ff.png": "images/e4ac393345addd22.png"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "completed_count": 13,
+  "hash_to_file": {
+    "313b858424d5f504816ba7a1d06c1145fd19ccfc7d10eeda6b2685fda496800e": "images/313b858424d5f504.img",
+    "397006559d930e60ce0c870f659b1fba59d150ebd500cb3265cf3b0809b868ce": "images/397006559d930e60.jpg",
+    "3e6faaa60e2d91f8a6c58524d3a37f5b68d23d617a96ea4f6985a8078b5185f8": "images/3e6faaa60e2d91f8.img",
+    "5d30385fd67bd1c129a2cf448c71df0ff1cf9c0d0b0d5c4d8f1eac0831c07fd6": "images/5d30385fd67bd1c1.jpg",
+    "5e3b2c8d99767812afe4d8e61e0f0a4ddc6a7042e1910fe4446d0795bf4a6ca7": "images/5e3b2c8d99767812.img",
+    "7ad1deca284e55fabdc774aa46a6490baee5be68bead94f78166a25ab94b3412": "images/7ad1deca284e55fa.jpg",
+    "86672e480feeb70fed7ad8601633f0306a427845ab4d3c5daf8d6a4ef94abb7c": "images/86672e480feeb70f.jpg",
+    "8d065b445513430f7b180b4b2c5fe6758d8c263cd5f8a856c4094ef35221d7f1": "images/8d065b445513430f.img",
+    "901359a7e0e2c200f369fb9735938cc407a4992b3c6b158307e0af059adfb4ed": "images/901359a7e0e2c200.jpg",
+    "c2777fa66ec363fb8c7478a07b04c932d8ad886bbfd394705123038239453e98": "images/c2777fa66ec363fb.jpg",
+    "d6b5388eaa27664654c4bd40d4c50a98a6a9d28c8b21c582f90d7d35147dcd04": "images/d6b5388eaa276646.img",
+    "e4ac393345addd22ab471d9037a90fcfd8e5336b1d29c459757b5667eab9ba38": "images/e4ac393345addd22.png",
+    "f79baeb60a2d7eb46027b79a2e42c5588b1dd08e0ed9cf8ba451905c29053776": "images/f79baeb60a2d7eb4.img"
+  },
+  "url_status": {
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJ0lEQVR4AUyJgQkAAAjCoP9v9QVjYWAwWG4k+XGOP3qtnQa9tdNgAQAA///kARRZAAAABklEQVQDANSVVUfL+EKZAAAAAElFTkSuQmCC": "done",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJklEQVR4AYSJwQkAAAgCof1ndQXjwqBfgnB6JclbJ+zguMs4+n0NAAD//+a+cRYAAAAGSURBVAMA0WVVR0niwXsAAAAASUVORK5CYII=": "done",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAABCAYAAABOgffqAAAAKElEQVR4AbyNsQkAAAzCoP/fmhdaOggd6qogBBFSQCvL6t0cJ7+fawAAAP//LcnaFgAAAAZJREFUAwB9A7ayuoF26AAAAABJRU5ErkJggg==": "done",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAABCAYAAACG7R08AAAAMElEQVR4AbyNSwoAAAQFy/3P+q5AI8pGWVFT83xikrzxKnJpzi7ODcxdMnz35r/NAwAA//89wgBVAAAABklEQVQDAAOK8KsdzcELAAAAAElFTkSuQmCC": "done",
+    "http://thirdwx.qlogo.cn/mmopen/vi_32/wwM75BhyU43UYOJ6fZCZgY6pfNPGHHRlooPLQEtDGUNic4aLRHWmBRTpIiblBAFheUVm9Sw8HWAChcFsnVM2sd5Q/132": "done",
+    "https://static001.geekbang.org/account/avatar/00/11/f7/a1/49643e20.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "done",
+    "https://static001.geekbang.org/account/avatar/00/12/e3/d8/bc70f34a.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "done",
+    "https://static001.geekbang.org/account/avatar/00/13/6b/8c/bf9e6f2c.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "done",
+    "https://static001.geekbang.org/account/avatar/00/15/61/ef/ac5e914d.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "done",
+    "https://static001.geekbang.org/resource/image/20/84/200e21887f18b8f3aa9aaecac7b0d284.jpg?wh=3176x6706": "done",
+    "https://static001.geekbang.org/resource/image/3d/6e/3dc1170769e322a40aa13e63d018f36e.jpg": "done",
+    "https://static001.geekbang.org/resource/image/cc/ff/ccd9509c61b46cbf1a0be5b67fa623ff.png": "done",
+    "https://thirdwx.qlogo.cn/mmopen/vi_32/hmIyIo0ze5dGsf22dhqYaklq9OhicmJQz7CHsjg58gze97LEMNKL48Q4TqIcxtOPKb4SHTqFWColAEKEBknFtQg/132": "done"
+  },
+  "url_to_file": {
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJ0lEQVR4AUyJgQkAAAjCoP9v9QVjYWAwWG4k+XGOP3qtnQa9tdNgAQAA///kARRZAAAABklEQVQDANSVVUfL+EKZAAAAAElFTkSuQmCC": "images/3e6faaa60e2d91f8.img",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAJklEQVR4AYSJwQkAAAgCof1ndQXjwqBfgnB6JclbJ+zguMs4+n0NAAD//+a+cRYAAAAGSURBVAMA0WVVR0niwXsAAAAASUVORK5CYII=": "images/d6b5388eaa276646.img",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAABCAYAAABOgffqAAAAKElEQVR4AbyNsQkAAAzCoP/fmhdaOggd6qogBBFSQCvL6t0cJ7+fawAAAP//LcnaFgAAAAZJREFUAwB9A7ayuoF26AAAAABJRU5ErkJggg==": "images/313b858424d5f504.img",
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAABCAYAAACG7R08AAAAMElEQVR4AbyNSwoAAAQFy/3P+q5AI8pGWVFT83xikrzxKnJpzi7ODcxdMnz35r/NAwAA//89wgBVAAAABklEQVQDAAOK8KsdzcELAAAAAElFTkSuQmCC": "images/5e3b2c8d99767812.img",
+    "http://thirdwx.qlogo.cn/mmopen/vi_32/wwM75BhyU43UYOJ6fZCZgY6pfNPGHHRlooPLQEtDGUNic4aLRHWmBRTpIiblBAFheUVm9Sw8HWAChcFsnVM2sd5Q/132": "images/8d065b445513430f.img",
+    "https://static001.geekbang.org/account/avatar/00/11/f7/a1/49643e20.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "images/397006559d930e60.jpg",
+    "https://static001.geekbang.org/account/avatar/00/12/e3/d8/bc70f34a.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "images/86672e480feeb70f.jpg",
+    "https://static001.geekbang.org/account/avatar/00/13/6b/8c/bf9e6f2c.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "images/c2777fa66ec363fb.jpg",
+    "https://static001.geekbang.org/account/avatar/00/15/61/ef/ac5e914d.jpg?x-oss-process=image/resize,m_fill,h_72,w_72": "images/7ad1deca284e55fa.jpg",
+    "https://static001.geekbang.org/resource/image/20/84/200e21887f18b8f3aa9aaecac7b0d284.jpg?wh=3176x6706": "images/5d30385fd67bd1c1.jpg",
+    "https://static001.geekbang.org/resource/image/3d/6e/3dc1170769e322a40aa13e63d018f36e.jpg": "images/901359a7e0e2c200.jpg",
+    "https://static001.geekbang.org/resource/image/cc/ff/ccd9509c61b46cbf1a0be5b67fa623ff.png": "images/e4ac393345addd22.png",
+    "https://thirdwx.qlogo.cn/mmopen/vi_32/hmIyIo0ze5dGsf22dhqYaklq9OhicmJQz7CHsjg58gze97LEMNKL48Q4TqIcxtOPKb4SHTqFWColAEKEBknFtQg/132": "images/f79baeb60a2d7eb4.img"
+  }
+}

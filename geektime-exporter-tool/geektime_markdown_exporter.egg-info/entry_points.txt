@@ -1,0 +1,2 @@
+[console_scripts]
+geektime-exporter = geektime_exporter.cli:main

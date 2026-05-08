@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geektime-markdown-exporter"
+version = "0.1.0"
+description = "Export Geektime column articles to GitHub Flavored Markdown"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+geektime-exporter = "geektime_exporter.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

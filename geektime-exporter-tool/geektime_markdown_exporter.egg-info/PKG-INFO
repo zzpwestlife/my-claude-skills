@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: geektime-markdown-exporter
+Version: 0.1.0
+Summary: Export Geektime column articles to GitHub Flavored Markdown
+Requires-Python: >=3.10
