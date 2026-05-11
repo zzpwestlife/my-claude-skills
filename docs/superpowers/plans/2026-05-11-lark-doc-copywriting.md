@@ -64,25 +64,19 @@ def fix_line(line):
     return line
 
 def detect_code_candidates(lines):
+    # Only first line needs to match a CODE_PATTERN; expand block until blank line.
+    # SQL/bash continuation lines don't match patterns — old per-line approach missed them.
     candidates = []
     in_code = False
-    run_start = None
-    run_lang = None
-    for i, line in enumerate(lines):
-        stripped = line.strip()
+    i = 0
+    while i < len(lines):
+        stripped = lines[i].strip()
         if stripped.startswith('```'):
             in_code = not in_code
-            if run_start is not None:
-                if i - run_start >= 3:
-                    candidates.append({
-                        'start': run_start,
-                        'end': i - 1,
-                        'lang': run_lang,
-                        'preview': lines[run_start][:80].strip()
-                    })
-                run_start = None
+            i += 1
             continue
         if in_code:
+            i += 1
             continue
         matched_lang = None
         for lang, pat in CODE_PATTERNS.items():
@@ -90,27 +84,22 @@ def detect_code_candidates(lines):
                 matched_lang = lang
                 break
         if matched_lang:
-            if run_start is None:
-                run_start = i
-                run_lang = matched_lang
-            elif matched_lang != run_lang:
-                if i - run_start >= 3:
-                    candidates.append({
-                        'start': run_start, 'end': i - 1,
-                        'lang': run_lang,
-                        'preview': lines[run_start][:80].strip()
-                    })
-                run_start = i
-                run_lang = matched_lang
+            block_start = i
+            j = i + 1
+            while j < len(lines):
+                next_stripped = lines[j].strip()
+                if not next_stripped or next_stripped.startswith('<image '):
+                    break
+                j += 1
+            block_end = j - 1
+            if block_end - block_start + 1 >= 3:
+                candidates.append({
+                    'start': block_start, 'end': block_end,
+                    'lang': matched_lang, 'preview': lines[block_start][:80].strip()
+                })
+            i = j
         else:
-            if run_start is not None:
-                if i - run_start >= 3:
-                    candidates.append({
-                        'start': run_start, 'end': i - 1,
-                        'lang': run_lang,
-                        'preview': lines[run_start][:80].strip()
-                    })
-                run_start = None
+            i += 1
     return candidates
 
 def process(src_path, dst_path, diff_path, candidates_path):
