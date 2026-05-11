@@ -197,6 +197,53 @@ def test_run_export_relogin_when_session_invalid(tmp_path: Path) -> None:
     assert login_calls["count"] == 2
 
 
+def test_run_export_relogin_when_http_451_indicates_cookie_invalid(tmp_path: Path) -> None:
+    seen_tokens: list[str] = []
+    login_calls = {"count": 0}
+
+    def login_func(_credentials: Credentials) -> Session:
+        login_calls["count"] += 1
+        token = "old-token" if login_calls["count"] == 1 else "new-token"
+        return Session(
+            token=token,
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
+        )
+
+    def fetcher(url: str, headers: dict[str, str]) -> str:
+        token = headers.get("Authorization", "").replace("Bearer ", "")
+        seen_tokens.append(token)
+        if token == "old-token":
+            raise urllib.error.HTTPError(url=url, code=451, msg="blocked", hdrs=None, fp=None)
+        return """
+        <article>
+          <h1>451 自动恢复成功</h1>
+          <p>正文</p>
+        </article>
+        """
+
+    options = RuntimeOptions(
+        article="https://time.geekbang.org/column/article/202",
+        batch=None,
+        output=str(tmp_path / "out"),
+        images_dir=str(tmp_path / "out" / "assets"),
+        naming="slug",
+        retries=1,
+    )
+    config = {"username": "u", "password": "p"}
+
+    exit_code = run_export(
+        options,
+        config,
+        login_func=login_func,
+        fetcher=fetcher,
+        sleep_fn=lambda _s: None,
+    )
+
+    assert exit_code == 0
+    assert seen_tokens[:2] == ["old-token", "new-token"]
+    assert login_calls["count"] == 2
+
+
 def test_build_browser_login_prefers_cdp(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[str] = []
 
@@ -239,6 +286,37 @@ def test_build_browser_login_cdp_unavailable_strict_fail(monkeypatch: pytest.Mon
         login(Credentials(username="browser", password="browser"))
 
 
+def test_build_browser_login_cdp_unavailable_falls_back_when_not_strict(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+
+    def fake_cdp(**kwargs):  # type: ignore[no-untyped-def]
+        calls.append("cdp")
+        raise AuthFailureError("cdp unavailable")
+
+    def fake_fallback(**kwargs):  # type: ignore[no-untyped-def]
+        calls.append("fallback")
+        return type(
+            "Result",
+            (),
+            {
+                "cookie_header": "sid=fallback",
+                "expires_at": datetime.now(timezone.utc) + timedelta(hours=1),
+            },
+        )()
+
+    import geektime_exporter.runtime as runtime
+
+    monkeypatch.setattr(runtime, "login_with_cdp_session", fake_cdp)
+    monkeypatch.setattr(runtime, "login_with_browser_session", fake_fallback)
+    login = _build_browser_login({})
+    session = login(Credentials(username="browser", password="browser"))
+
+    assert calls == ["cdp", "fallback"]
+    assert session.token.startswith("cookie:")
+
+
 def test_looks_like_spa_shell() -> None:
     assert _looks_like_spa_shell('<html><body><div id="app"></div><script src="/main.js"></script></body></html>')
     assert not _looks_like_spa_shell("<html><body><article><p>content</p></article></body></html>")
@@ -265,3 +343,89 @@ def test_hybrid_fetcher_switches_to_cdp_render(monkeypatch: pytest.MonkeyPatch) 
 
     assert calls == ["http", "cdp"]
     assert "rendered" in html
+
+
+def test_hybrid_fetcher_falls_back_to_raw_html_when_cdp_unavailable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+    shell_html = '<html><body><div id="app"></div><script src="/main.js"></script></body></html>'
+
+    def fake_http_fetch(url: str, headers: dict[str, str]) -> str:
+        calls.append("http")
+        return shell_html
+
+    def fake_render(**kwargs):  # type: ignore[no-untyped-def]
+        calls.append("cdp")
+        raise AuthFailureError("cdp endpoint invalid")
+
+    import geektime_exporter.runtime as runtime
+    import logging
+
+    monkeypatch.setattr(runtime, "_http_fetch", fake_http_fetch)
+    monkeypatch.setattr(runtime, "fetch_rendered_page_via_cdp", fake_render)
+    fetcher = _build_hybrid_fetcher("http://127.0.0.1:9222", logging.getLogger("test"))
+    html = fetcher("https://time.geekbang.org/column/article/1", {"Cookie": "a=b"})
+
+    assert calls == ["http", "cdp"]
+    assert html == shell_html
+
+
+def test_run_export_auth_failure_recover_by_invalidating_session_and_retry_once(
+    tmp_path: Path,
+) -> None:
+    from geektime_exporter.errors import AuthFailureError
+
+    login_calls = {"count": 0}
+    fetch_calls = {"count": 0}
+
+    def login_func(_credentials: Credentials) -> Session:
+        login_calls["count"] += 1
+        return Session(
+            token=f"cookie:token-{login_calls['count']}",
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
+        )
+
+    def flaky_fetcher(_url: str, _headers: dict[str, str]) -> str:
+        fetch_calls["count"] += 1
+        if fetch_calls["count"] == 1:
+            raise AuthFailureError("login cookie invalid")
+        return """
+        <article>
+          <h1>恢复成功</h1>
+          <p>正文</p>
+        </article>
+        """
+
+    output_dir = tmp_path / "out"
+    session_file = output_dir / ".session.json"
+    session_file.parent.mkdir(parents=True, exist_ok=True)
+    session_file.write_text(
+        '{"token":"cookie:stale","expires_at":"2999-01-01T00:00:00+00:00"}',
+        encoding="utf-8",
+    )
+
+    options = RuntimeOptions(
+        article="https://time.geekbang.org/column/article/100",
+        batch=None,
+        output=str(output_dir),
+        images_dir=str(output_dir / "assets"),
+        naming="slug",
+        retries=1,
+    )
+    config = {
+        "auth_mode": "browser",
+        "session_file": str(session_file),
+        "log_file": str(output_dir / "run.log"),
+    }
+    exit_code = run_export(
+        options,
+        config,
+        login_func=login_func,
+        fetcher=flaky_fetcher,
+        sleep_fn=lambda _s: None,
+    )
+
+    assert exit_code == 0
+    assert login_calls["count"] == 1
+    assert fetch_calls["count"] == 2

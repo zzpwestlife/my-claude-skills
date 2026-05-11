@@ -61,6 +61,7 @@ def fetch_article_page(
     article_url: str,
     session_token: str,
     fetcher: Fetcher | None = None,
+    extra_headers: dict[str, str] | None = None,
 ) -> str:
     http_fetcher = fetcher or _default_fetcher
     headers = {"User-Agent": "geektime-exporter/0.1"}
@@ -68,10 +69,12 @@ def fetch_article_page(
         headers["Cookie"] = session_token.removeprefix("cookie:")
     else:
         headers["Authorization"] = f"Bearer {session_token}"
+    if extra_headers:
+        headers.update(extra_headers)
     try:
         return http_fetcher(article_url, headers)
     except HTTPError as exc:
-        if exc.code in {401, 403}:
+        if exc.code in {401, 403, 451}:
             raise SessionInvalidError(f"http unauthorized: {exc.code}") from exc
         raise
 

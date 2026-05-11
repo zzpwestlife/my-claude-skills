@@ -132,7 +132,7 @@ def _build_browser_login(
     ).strip()
     timeout_seconds = int(config.get("browser_login_timeout_seconds", 300))
     cdp_url = str(config.get("browser_cdp_url", "http://127.0.0.1:9222")).strip()
-    cdp_required = _as_bool(config.get("browser_cdp_required"), default=True)
+    cdp_required = _as_bool(config.get("browser_cdp_required"), default=False)
 
     def _to_session(result) -> Session:  # type: ignore[no-untyped-def]
         return Session(token=f"cookie:{result.cookie_header}", expires_at=result.expires_at)
@@ -195,6 +195,14 @@ def _retry(
     raise RetryExhaustedError("Operation failed unexpectedly")
 
 
+def _is_auth_related_failure(exc: Exception) -> bool:
+    if isinstance(exc, (AuthFailureError, SessionInvalidError)):
+        return True
+    if isinstance(exc, RetryExhaustedError) and exc.__cause__ is not None:
+        return _is_auth_related_failure(exc.__cause__)
+    return False
+
+
 def _http_fetch(url: str, headers: dict[str, str]) -> str:
     request = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(request) as response:  # noqa: S310
@@ -210,7 +218,15 @@ def _build_hybrid_fetcher(cdp_url: str, logger: logging.Logger) -> Callable[[str
         html = _http_fetch(url, headers)
         if _looks_like_spa_shell(html):
             logger.info("detected spa shell, switching to cdp render url=%s", url)
-            return fetch_rendered_page_via_cdp(cdp_url=cdp_url, page_url=url)
+            try:
+                return fetch_rendered_page_via_cdp(cdp_url=cdp_url, page_url=url)
+            except AuthFailureError as exc:
+                logger.warning(
+                    "cdp render unavailable, fallback to raw html url=%s reason=%s",
+                    url,
+                    exc,
+                )
+                return html
         return html
 
     return _fetch
@@ -296,5 +312,21 @@ def run_export(
     except Exception as exc:  # noqa: BLE001
         err = classify_exception(exc)
         logger.error("failed code=%s message=%s context=%s", err.code, err.message, err.context)
+        if _is_auth_related_failure(exc):
+            logger.warning("detected auth/session failure, invalidating cached session and retrying once")
+            auth.invalidate_session()
+            try:
+                _retry(_execute, retries=1, logger=logger, sleep_fn=sleep)
+                logger.info("recovered after session reset and re-login")
+                return 0
+            except Exception as recover_exc:  # noqa: BLE001
+                recover_err = classify_exception(recover_exc)
+                logger.error(
+                    "recovery failed code=%s message=%s context=%s",
+                    recover_err.code,
+                    recover_err.message,
+                    recover_err.context,
+                )
+                raise
         raise
     return 0

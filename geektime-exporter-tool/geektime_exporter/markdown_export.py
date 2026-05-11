@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, urlencode, urlparse
 
 from .article_parser import (
     Block,
@@ -21,6 +22,7 @@ from .article_parser import (
 from .image_localizer import Downloader, localize_markdown_images
 
 _ARTICLE_ID_RE = re.compile(r"/column/article/(\d+)/?$")
+_COLUMN_ID_RE = re.compile(r"/column/intro/(\d+)/?$")
 _INVALID_FILENAME_RE = re.compile(r'[<>:"/\\|?*\x00-\x1f]+')
 _SPACE_RE = re.compile(r"\s+")
 _PUNCT_RE = re.compile(r"[^A-Za-z0-9\u4e00-\u9fff_-]+")
@@ -53,6 +55,79 @@ def _article_id(article_url: str) -> str | None:
     if not matched:
         return None
     return matched.group(1)
+
+
+def _column_id(column_url: str) -> str | None:
+    matched = _COLUMN_ID_RE.search(urlparse(column_url).path)
+    if not matched:
+        return None
+    return matched.group(1)
+
+
+def _build_column_articles_api_url(column_url: str, column_id: str) -> str:
+    parsed = urlparse(column_url)
+    query = dict(parse_qsl(parsed.query, keep_blank_values=True))
+    query.pop("tab", None)
+    query.update({"cid": column_id, "size": "500", "prev": "0", "order": "earliest"})
+    return f"{parsed.scheme}://{parsed.netloc}/serv/v1/column/articles?{urlencode(query)}"
+
+
+def _discover_column_article_urls_via_api(
+    *,
+    column_url: str,
+    session_token: str,
+    fetcher: Fetcher | None,
+) -> list[str]:
+    column_id = _column_id(column_url)
+    if not column_id:
+        return []
+
+    api_url = _build_column_articles_api_url(column_url, column_id)
+    api_headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+        ),
+        "Accept": "application/json, text/plain, */*",
+        "Referer": column_url,
+        "Origin": f"{urlparse(column_url).scheme}://{urlparse(column_url).netloc}",
+        "X-Requested-With": "XMLHttpRequest",
+    }
+    body = fetch_article_page(
+        api_url,
+        session_token,
+        fetcher=fetcher,
+        extra_headers=api_headers,
+    )
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError:
+        return []
+
+    items: list[object] = []
+    if isinstance(payload, dict):
+        data = payload.get("data")
+        if isinstance(data, dict):
+            raw_items = data.get("list", [])
+            if isinstance(raw_items, list):
+                items = raw_items
+        elif isinstance(data, list):
+            items = data
+        elif isinstance(payload.get("list"), list):
+            items = payload.get("list", [])
+
+    if not isinstance(items, list):
+        return []
+
+    urls: list[str] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        article_id = str(item.get("article_id", "")).strip()
+        if not article_id:
+            continue
+        urls.append(f"https://time.geekbang.org/column/article/{article_id}")
+    return urls
 
 
 def render_gfm_markdown(blocks: list[Block]) -> str:
@@ -196,6 +271,12 @@ def export_batch_articles(
 ) -> list[ExportedArticle]:
     column_html = fetch_article_page(column_url, session_token, fetcher=fetcher)
     article_urls = discover_column_article_urls(html=column_html, base_url=column_url)
+    if not article_urls:
+        article_urls = _discover_column_article_urls_via_api(
+            column_url=column_url,
+            session_token=session_token,
+            fetcher=fetcher,
+        )
 
     filtered_urls = article_urls
     if start_article_id:

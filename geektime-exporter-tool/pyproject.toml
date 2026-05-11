@@ -12,6 +12,9 @@ dependencies = []
 [project.scripts]
 geektime-exporter = "geektime_exporter.cli:main"
 
+[tool.setuptools.packages.find]
+include = ["geektime_exporter*"]
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]

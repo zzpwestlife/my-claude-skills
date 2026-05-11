@@ -1,7 +1,7 @@
 {
   "auth_mode": "browser",
   "browser_cdp_url": "http://127.0.0.1:9222",
-  "browser_cdp_required": true,
+  "browser_cdp_required": false,
   "browser_login_url": "https://time.geekbang.org/",
   "browser_verify_url": "https://time.geekbang.org/",
   "browser_login_timeout_seconds": 30,

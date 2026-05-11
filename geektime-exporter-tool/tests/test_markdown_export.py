@@ -242,3 +242,77 @@ def test_export_batch_articles_supports_start_article_id(tmp_path: Path) -> None
     assert len(results) == 2
     names = sorted(item.file_path.name for item in results)
     assert names == ["101.md", "102.md"]
+
+
+def test_export_batch_articles_falls_back_to_column_api_when_catalog_has_no_links(
+    tmp_path: Path,
+) -> None:
+    column_html = '<html><body><div id="app"></div><script src="/main.js"></script></body></html>'
+    article_html = """
+    <article>
+      <h1>批量标题</h1>
+      <p>正文</p>
+    </article>
+    """
+    api_body = (
+        '{"data":{"list":['
+        '{"article_id":963262},'
+        '{"article_id":963273}'
+        ']}}'
+    )
+
+    seen_headers: dict[str, str] = {}
+
+    def fetcher(url: str, headers: dict[str, str]) -> str:
+        if "/serv/v1/column/articles" in url:
+            seen_headers.update(headers)
+            return api_body
+        if "article" in url:
+            return article_html
+        return column_html
+
+    results = export_batch_articles(
+        column_url="https://time.geekbang.org/column/intro/101132501?tab=catalog",
+        session_token="cookie:session_id=abc",
+        output_dir=tmp_path / "out",
+        images_dir=tmp_path / "out" / "assets",
+        naming="id",
+        fetcher=fetcher,
+        downloader=lambda url: b"image",
+    )
+
+    assert len(results) == 2
+    names = sorted(item.file_path.name for item in results)
+    assert names == ["963262.md", "963273.md"]
+    assert seen_headers.get("X-Requested-With") == "XMLHttpRequest"
+    assert "Mozilla/5.0" in seen_headers.get("User-Agent", "")
+
+
+def test_export_batch_articles_supports_api_payload_data_as_list(tmp_path: Path) -> None:
+    column_html = '<html><body><div id="app"></div><script src="/main.js"></script></body></html>'
+    article_html = """
+    <article>
+      <h1>批量标题</h1>
+      <p>正文</p>
+    </article>
+    """
+    api_body = '{"data":[{"article_id":963262},{"article_id":963273}]}'
+
+    def fetcher(url: str, headers: dict[str, str]) -> str:
+        if "/serv/v1/column/articles" in url:
+            return api_body
+        if "article" in url:
+            return article_html
+        return column_html
+
+    results = export_batch_articles(
+        column_url="https://time.geekbang.org/column/intro/101132501?tab=catalog",
+        session_token="cookie:session_id=abc",
+        output_dir=tmp_path / "out",
+        images_dir=tmp_path / "out" / "assets",
+        naming="id",
+        fetcher=fetcher,
+        downloader=lambda url: b"image",
+    )
+
+    assert len(results) == 2

@@ -8,6 +8,21 @@ from datetime import datetime, timedelta, timezone
 
 from .errors import AuthFailureError
 
+_AUTH_DENY_MARKERS = (
+    "请登录",
+    "先登录",
+    "登录后",
+    "未登录",
+    "sign in",
+    "log in",
+)
+_AUTH_ALLOW_MARKERS = (
+    "退出登录",
+    "个人中心",
+    "我的课程",
+    "已购买",
+)
+
 
 @dataclass(frozen=True)
 class BrowserSessionResult:
@@ -28,7 +43,12 @@ def _validate_cookie(cookie_header: str, verify_url: str) -> bool:
             if response.status != 200:
                 return False
             body = response.read().decode("utf-8", errors="ignore")
-            return "error" not in body.lower()
+            text = body.lower()
+            if any(marker in text for marker in _AUTH_ALLOW_MARKERS):
+                return True
+            if any(marker in text for marker in _AUTH_DENY_MARKERS):
+                return False
+            return True
     except Exception:  # noqa: BLE001
         return False
 
@@ -56,8 +76,10 @@ def login_with_browser_session(
         context = browser.new_context()
         page = context.new_page()
         page.goto(login_url, wait_until="domcontentloaded")
+        print("浏览器已打开，请在页面完成登录。程序会自动检测登录态...")
 
         deadline = time.time() + timeout_seconds
+        next_hint_at = time.time() + 15
         while time.time() < deadline:
             cookies = context.cookies("https://time.geekbang.org")
             if cookies:
@@ -70,6 +92,10 @@ def login_with_browser_session(
                         cookie_header=cookie_header,
                         expires_at=datetime.now(timezone.utc) + timedelta(days=7),
                     )
+            if time.time() >= next_hint_at:
+                remaining = max(int(deadline - time.time()), 0)
+                print(f"仍在等待登录态确认...（剩余约 {remaining}s）")
+                next_hint_at = time.time() + 15
             page.wait_for_timeout(int(poll_interval_seconds * 1000))
 
         browser.close()

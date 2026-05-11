@@ -1,9 +1,9 @@
-README.md
 pyproject.toml
 geektime_exporter/__init__.py
 geektime_exporter/__main__.py
 geektime_exporter/article_parser.py
 geektime_exporter/auth.py
+geektime_exporter/browser_auth.py
 geektime_exporter/cli.py
 geektime_exporter/config.py
 geektime_exporter/errors.py
@@ -17,6 +17,7 @@ geektime_markdown_exporter.egg-info/entry_points.txt
 geektime_markdown_exporter.egg-info/top_level.txt
 tests/test_article_parser.py
 tests/test_auth_session.py
+tests/test_browser_auth.py
 tests/test_cli_integration.py
 tests/test_export_cli.py
 tests/test_image_localizer.py

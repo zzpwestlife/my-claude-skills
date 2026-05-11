@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import builtins
+import urllib.error
+import urllib.request
 from dataclasses import dataclass, replace
 from typing import Sequence
 
@@ -138,6 +140,63 @@ def _interactive_options(config_hint: dict[str, object], config_arg: str | None)
     )
 
 
+def _as_bool(value: object, default: bool = False) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return default
+    if isinstance(value, str):
+        lowered = value.strip().lower()
+        if lowered in {"1", "true", "yes", "on"}:
+            return True
+        if lowered in {"0", "false", "no", "off"}:
+            return False
+    return bool(value)
+
+
+def _check_cdp_endpoint_health(cdp_url: str) -> tuple[bool, str]:
+    base = cdp_url.rstrip("/")
+    target = f"{base}/json/version"
+    try:
+        request = urllib.request.Request(target, method="GET")
+        with urllib.request.urlopen(request, timeout=3) as response:  # noqa: S310
+            if response.status == 200:
+                return (True, "ok")
+            return (False, f"status={response.status}")
+    except urllib.error.HTTPError as exc:
+        return (False, f"status={exc.code}")
+    except Exception as exc:  # noqa: BLE001
+        return (False, str(exc))
+
+
+def _preflight_cdp_requirement(config: dict[str, object], *, interactive: bool) -> dict[str, object]:
+    auth_mode = str(config.get("auth_mode", "browser")).strip().lower()
+    if auth_mode != "browser":
+        return config
+    if not _as_bool(config.get("browser_cdp_required"), default=False):
+        return config
+
+    cdp_url = str(config.get("browser_cdp_url", "http://127.0.0.1:9222")).strip()
+    healthy, reason = _check_cdp_endpoint_health(cdp_url)
+    if healthy:
+        return config
+
+    print(
+        "WARNING: 检测到 CDP 端点不可用，"
+        f"browser_cdp_required=true 可能导致失败。endpoint={cdp_url} reason={reason}"
+    )
+    if not interactive:
+        return config
+
+    choice = _prompt("是否临时切换为 browser_cdp_required=false 并继续", "y").strip().lower()
+    if choice in {"", "y", "yes", "1", "是"}:
+        copied = dict(config)
+        copied["browser_cdp_required"] = False
+        print("已临时切换 browser_cdp_required=false，仅对本次运行生效。")
+        return copied
+    return config
+
+
 def parse_args(argv: Sequence[str] | None = None) -> ExportOptions:
     bootstrap, _ = _bootstrap_parser().parse_known_args(argv)
 
@@ -199,6 +258,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         config = load_config(options.config)
     except ConfigError as exc:
         raise SystemExit(str(exc)) from exc
+    config = _preflight_cdp_requirement(config, interactive=(bootstrap.command == "run"))
     return run_export(
         RuntimeOptions(
             article=options.article,

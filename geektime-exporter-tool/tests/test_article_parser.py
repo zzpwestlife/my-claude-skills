@@ -114,11 +114,12 @@ def test_fetch_article_page_supports_cookie_session() -> None:
     assert called["cookie"] == "session_id=abc; uid=1"
 
 
-def test_fetch_article_page_unauthorized_raises_session_invalid() -> None:
+@pytest.mark.parametrize("status_code", [401, 403, 451])
+def test_fetch_article_page_auth_related_http_errors_raise_session_invalid(status_code: int) -> None:
     def unauthorized_fetcher(url: str, headers: dict[str, str]) -> str:
         raise urllib.error.HTTPError(
             url=url,
-            code=401,
+            code=status_code,
             msg="unauthorized",
             hdrs=None,
             fp=None,
