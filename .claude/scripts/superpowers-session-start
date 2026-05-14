@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# SessionStart hook for superpowers plugin (Optimized)
+
+set -euo pipefail
+
+# Determine plugin root directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Build warning for legacy skills (if exists)
+warning_message=""
+legacy_skills_dir="${HOME}/.config/superpowers/skills"
+if [ -d "$legacy_skills_dir" ]; then
+    warning_message="\n\n<important-reminder>IN YOUR FIRST REPLY AFTER SEEING THIS MESSAGE YOU MUST TELL THE USER:⚠️ **WARNING:** Superpowers now uses Claude Code's skills system. Custom skills in ~/.config/superpowers/skills will not be read. Move custom skills to ~/.claude/skills instead. To make this message go away, remove ~/.config/superpowers/skills</important-reminder>"
+fi
+
+# Escape string for JSON embedding
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//\"/\\\"}"
+    s="${s//$'\n'/\\n}"
+    s="${s//$'\r'/\\r}"
+    s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
+
+# OPTIMIZED: Inject skill path reference instead of full content
+# This saves ~1000 tokens per session
+skill_path="${PLUGIN_ROOT}/skills/using-superpowers/SKILL.md"
+session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the path to your 'using-superpowers' skill:**\n\nSKILL PATH: ${skill_path}\n\nUse the Read tool to load this skill when needed.\n\n${warning_message}\n</EXTREMELY_IMPORTANT>"
+
+doc_dirty() {
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 1
+  local status
+  status="$(git status --porcelain --untracked-files=normal 2>/dev/null || true)"
+  [[ -n "$status" ]] || return 1
+  echo "$status" | grep -Eq '(^|[[:space:]])(README\.md|CLAUDE\.md|AGENTS\.md|HANDOFF\.md|docs/)' && return 0
+  return 1
+}
+
+# SessionStart fallback: remind neat-freak if doc-related files are dirty.
+if doc_dirty; then
+  session_context="${session_context}\n\n<important-reminder>检测到文档相关改动（README/docs/CLAUDE.md/AGENTS.md 等）尚未收尾同步。建议运行 neat-freak：/neat-freak（或在支持的客户端里直接调用 Skill(name=\"neat-freak\")）。</important-reminder>"
+fi
+
+warning_escaped=$(escape_for_json "$warning_message")
+
+# Output context injection as JSON
+cat <<EOF
+{
+  "additional_context": "${session_context}",
+  "hookSpecificOutput": {
+    "hookEventName": "SessionStart",
+    "additionalContext": "${session_context}"
+  }
+}
+EOF
+
+exit 0

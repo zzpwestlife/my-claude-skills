@@ -1,0 +1,12 @@
+{
+  "ignore_patterns": [
+    "*.lock",
+    "package-lock.json",
+    "yarn.lock",
+    "dist/*",
+    "build/*",
+    "*.map",
+    ".DS_Store"
+  ],
+  "commit_url_template": ""
+}

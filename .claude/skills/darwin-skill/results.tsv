@@ -1,0 +1,59 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-04-20	baseline	ielts	-	67.0	baseline	-	Initial evaluation	dry_run
+2026-04-20	efcf834	ielts	67.0	70.1	keep	Frontmatter质量 (D1)	Added name/description/trigger words frontmatter block	dry_run
+2026-04-20	604e128	ielts	70.1	83.6	keep	边界条件+指令具体性+实测表现 (D3/D5/D8)	Edge cases for feed + Modify flow + section inference + ielts_vocab schema	dry_run
+2026-04-20	8bc6158	ielts	83.6	85.0	keep	检查点设计 (D4)	Preview-before-append checkpoint for /ielts vocab	dry_run
+2026-04-20	70be8ff	ielts	85.0	88.0	keep	工作流清晰度 (D2)	anchor reset path + write preview + status empty-state handling	dry_run
+2026-04-20	fb0860b	ielts	88.0	89.5	keep	整体架构 (D7)	TL;DR quick reference table	dry_run
+2026-04-20	f119e31	ielts	89.5	90.5	keep	资源整合度 (D6)	Extract base path as documented constant	dry_run
+2026-04-20	baseline	english-immersion	-	57.4	baseline	-	Initial evaluation: D1=5.6 D2=9.0 D3=5.0 D4=2.8 D5=9.0 D6=3.5 D7=7.5 D8=15.0	dry_run
+2026-04-20	962ac98	english-immersion	57.4	58.8	keep	检查点设计 (D4)	Session-end trigger precision + 3-turns clarification + recovery fallback + deduplication	dry_run
+2026-04-20	9d744f8	english-immersion	58.8	59.8	keep	边界条件 (D3)	state.md fallback + mixed-input handling + backtracking spec	dry_run
+2026-04-20	bbdd6b6	english-immersion	59.8	59.8	revert	整体架构 (D7)	Integration map for IELTS hook — evaluator scored D7 4/10 (was 5), regressed	dry_run
+2026-04-20	06b5f06	english-immersion	59.8	59.8	revert	工作流清晰度 (D2)	3-condition intent heuristic — evaluator scored D2 4/10 (was 6), regressed	dry_run
+2026-04-20	74a2ed6	english-immersion	59.8	59.8	revert	指令具体性 (D5)	absorption_log schema + detector spec — evaluator scored D5 5/10 (was 6), regressed	dry_run
+2026-04-20	a99ab35	english-immersion	59.8	70.8	keep	Phase 2.5 rewrite	TL;DR table + errors_tagged schema + IELTS hook file-ownership table + absorption_log schema + concrete intent examples	dry_run
+2026-04-20	874a363	english-immersion	70.8	73.3	keep	D1+D8 round 1	Expand farewell trigger list + tighten frontmatter description	dry_run
+2026-04-20	a0fc883	english-immersion	73.3	73.1	keep	D1+D8 round 2	Trim frontmatter to <300 chars + add farewell decision tree + semantic-matching clarification	dry_run
+2026-04-20	f5aa748	english-immersion	73.1	73.1	keep	D6+D8	Farewell 4-step decision tree + reference file fallbacks (wittgenstein inline, taxonomy non-blocking)	dry_run
+2026-04-20	a03d6d9	english-immersion	73.1	75.5	keep	D3+D8	Session continuity after farewell + iCloud path fallback to .claude/english-immersion/tmp/	dry_run
+2026-04-28	baseline	brainstorming	-	85.0	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=016b13c, post=61d83ac	dry_run
+2026-04-28	baseline	writing-plans	-	85.3	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=016b13c, post=61d83ac	dry_run
+2026-04-28	baseline	executing-plans	-	85.3	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=4c02d53, post=6baecaf	dry_run
+2026-04-28	baseline	verification-before-completion	-	89.0	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=8037ee7, post=9fcca58	dry_run
+2026-04-28	baseline	test-driven-development	-	91.7	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=b83e820, post=4c66a6a	dry_run
+2026-04-28	baseline	code-review	-	82.3	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=7939709, post=16c5fe5	dry_run
+2026-04-28	baseline	systematic-debugging	-	91.0	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=d935ec9, post=89ac963	dry_run
+2026-04-28	baseline	design-first	-	88.3	baseline	-	Baseline with sharpened rubric (dry_run; D8 estimated). Comparison refs: pre=22414e0, post=72f0fba	dry_run
+2026-04-28	1d2a2e1	code-review	82.3	83.8	keep	边界条件覆盖 (D3)	Add Step0 no-diff stop condition + ask for explicit review target	dry_run
+2026-04-28	8ec2a97	code-review	83.8	85.3	keep	边界条件覆盖 (D3)	Add non-git fallback: request diff/PR/patch/files instead of producing generic review	dry_run
+2026-04-28	52a791f	brainstorming	85.0	86.0	keep	边界条件覆盖 (D3)	Add triage step: stop/downgrade when mis-triggered or when plan-only is needed	dry_run
+2026-04-28	d006167	brainstorming	86.0	87.5	keep	边界条件覆盖 (D3)	Clarify hard-gate exception + ask one question when triage is ambiguous	dry_run
+2026-04-28	3b18d21	brainstorming	87.5	91.5	keep	整体架构+指令具体性+Frontmatter (D7/D5/D1)	Add deliverables contract (R) + anti-anchoring + examples; shorten description	dry_run
+2026-04-28	31fa39b	executing-plans	85.3	86.8	keep	边界条件覆盖 (D3)	Add triage: no plan/review-only/non-git downgrade routes	dry_run
+2026-04-28	ad9128a	executing-plans	86.8	88.3	keep	边界条件覆盖 (D3)	Stop when plan lacks verification commands; route to verification-before-completion	dry_run
+2026-04-28	b622e8b	writing-plans	85.3	86.8	keep	边界条件覆盖 (D3)	Add mis-trigger downgrade: no approved spec -> brainstorming; execute request -> executing-plans	dry_run
+2026-04-28	1cea3d9	writing-plans	86.8	88.5	keep	边界条件覆盖+检查点设计 (D3/D4)	Stop on multi-subsystem spec; require AskUserQuestion confirmation before splitting into multiple plans	dry_run
+2026-04-28	82e717c	design-first	88.3	89.8	keep	边界条件覆盖 (D3)	Add mis-trigger routing to writing-plans/executing-plans/code-review	dry_run
+2026-04-28	303d283	design-first	89.8	91.3	keep	边界条件覆盖 (D3)	Add non-git fallback: request project/files/diff before proceeding with sizing/design	dry_run
+2026-04-28	a93bda8	design-first	91.3	94.8	keep	整体架构+指令具体性+Frontmatter (D7/D5/D1)	Add deliverables contract (R) + anti-anchoring + examples; shorten description	dry_run
+2026-04-28	18b38f0	verification-before-completion	89.0	89.8	keep	指令具体性 (D5)	Add mandatory evidence template (Claim/Command/Exit code/Evidence) for success claims	dry_run
+2026-04-28	2b528c6	verification-before-completion	89.8	90.8	keep	边界条件覆盖 (D3)	Add no-command/no-environment stop rule + alternative evidence ordering	dry_run
+2026-04-28	a8890bf	systematic-debugging	91.0	92.0	keep	边界条件覆盖 (D3)	Add no-repro/no-logs stop rule + minimum evidence checklist	dry_run
+2026-04-28	3f43286	systematic-debugging	92.0	92.8	keep	指令具体性 (D5)	Add minimal repro report template (Steps/Expected/Actual/Env/Logs)	dry_run
+2026-04-28	1036107	test-driven-development	91.7	92.7	keep	边界条件覆盖 (D3)	Add no-test-runner stop rule before proceeding to GREEN	dry_run
+2026-04-28	6b73d17	test-driven-development	92.7	93.5	keep	指令具体性 (D5)	Add mandatory GREEN evidence fields (command/exit/evidence)	dry_run
+2026-04-28	f7c359e	executing-plans	88.3	89.8	keep	整体架构+检查点设计 (D7/D4)	Add Reusable Interface (R) contract + anti-anchoring; shorten description	dry_run
+2026-04-28	f7c359e	verification-before-completion	90.8	92.3	keep	整体架构+检查点设计 (D7/D4)	Add Output Contract artifacts + limitation template + anti-anchoring; shorten description	dry_run
+2026-04-28	f7c359e	test-driven-development	93.5	94.8	keep	整体架构+Frontmatter (D7/D1)	Add TDD evidence block contract + anti-anchoring; shorten description; mark rationale as appendix	dry_run
+2026-04-28	fdc29aa	code-review	85.3	89.3	keep	整体架构+检查点设计+边界条件 (D7/D4/D3)	Add Review Artifact Contract (R) + evidence block + anti-anchoring; update report template; shorten description	dry_run
+2026-04-28	064104b	systematic-debugging	92.8	96.8	keep	整体架构+检查点设计+边界条件 (D7/D4/D3)	Add Debugging Contract (R) + evidence block + anti-anchoring; shorten description; add evidence priority order	dry_run
+2026-04-28	03133f8	writing-plans	88.5	92.0	keep	整体架构+指令具体性+Frontmatter (D7/D5/D1)	Add Plan Contract (R) + anti-anchoring; reduce comprehensive overload; shorten description	dry_run
+2026-04-29	baseline	neat-freak	-	82.9	baseline	-	Initial evaluation: D1=7.0 D2=9.0 D3=8.0 D4=6.5 D5=9.0 D6=9.0 D7=8.8 D8=8.0	dry_run
+2026-04-29	round1	neat-freak	82.9	84.8	keep	Frontmatter质量+检查点设计 (D1/D4)	Add Do-not-use + downgrade + examples in frontmatter; add AskUserQuestion checkpoints for delete/cross-project	dry_run
+2026-04-29	round2	neat-freak	84.8	87.3	keep	实测表现 (D8)	Add Step0 access check + output discipline; D8 scored via baseline-vs-skill contrast	test
+2026-04-29	round3	neat-freak	87.3	88.3	keep	边界条件覆盖 (D3)	Add mis-trigger downgrade templates for no-repo/summary-only/restricted-scope	dry_run
+2026-04-29	round4	neat-freak	88.3	89.0	keep	检查点设计 (D4)	Add checkpoint for large-scale doc restructure (≥5 docs files or ≥150 lines)	dry_run
+2026-04-29	round5	neat-freak	89.0	90.3	keep	实测表现+指令具体性 (D8/D5)	Add first-reply templates (≤8 lines) + minimum evidence set (file inventory/time-words/summary)	dry_run
+2026-04-29	round6	neat-freak	90.3	90.8	keep	实测表现 (D8)	Add evidence presentation template; attach baseline-vs-skill output snippets in report	test
+2026-04-29	round7	neat-freak	90.8	91.2	keep	Frontmatter质量 (D1)	Compress description; add two do-not-use cases + shorter examples	dry_run

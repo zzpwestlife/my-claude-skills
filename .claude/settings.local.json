@@ -1,7 +1,40 @@
 {
   "permissions": {
     "allow": [
-      "mcp__filesystem__directory_tree"
+      "Bash(npm:*)",
+      "Skill(optimize-prompt)",
+      "Bash(tree:*)",
+      "Bash(git:*)",
+      "Skill(executing-plans)",
+      "Bash(chmod:*)",
+      "Bash(python3:*)",
+      "Bash(xargs:*)",
+      "Bash(echo:*)",
+      "Bash(du:*)",
+      "Bash(ls:*)",
+      "Bash(go:*)",
+      "Bash(test:*)",
+      "Bash(pip3 install:*)",
+      "Bash(open:*)",
+      "Bash(mkdir -p .claude/skills/executing-plans/assets/prompts)",
+      "Bash(cp .claude/skills/subagent-driven-development/assets/prompts/*.md .claude/skills/executing-plans/assets/prompts/)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/go/format-go-code.sh"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/python/format-python-code.sh"
+          }
+        ]
+      }
     ]
   }
 }

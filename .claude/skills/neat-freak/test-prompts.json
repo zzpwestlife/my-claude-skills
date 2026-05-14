@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "prompt": "这个阶段做完了，帮我同步一下文档和记忆，保证新人能直接上手。",
+    "expected": "触发 neat-freak。先盘点：README / docs/ / CLAUDE.md(或AGENTS.md) /（若支持）记忆。然后按 sync-matrix 对照本次会话变更，实际修改文件，最后给出按项目分组的变更摘要 + 未处理问题。"
+  },
+  {
+    "id": 2,
+    "prompt": "tidy up docs please — I think README is stale after we changed the API routes.",
+    "expected": "触发 neat-freak。识别“新增/变更路由”属于高影响：同时更新项目根路由清单 + docs/integration-guide.md API速查 + docs/architecture.md Routes。摘要里必须列出具体文件与要点。"
+  },
+  {
+    "id": 3,
+    "prompt": "整理一下，但不要动全局配置（~/.claude/CLAUDE.md / ~/.codex/AGENTS.md）。",
+    "expected": "触发 neat-freak，但严格遵守“全局配置极度克制”：仅修改项目内 README/docs/ 与项目根指令文件；全局文件不读不改（除非用户后续明确要求）。"
+  },
+  {
+    "id": 4,
+    "prompt": "我们改了环境变量名：PAYMENTS_KEY -> PAYMENTS_API_KEY，顺便收尾。",
+    "expected": "触发 neat-freak。根据 sync-matrix：更新项目根环境变量表 + docs/operator-runbook.md 环境变量章节 +（若下游需要配置）docs/integration-guide.md。并做全文搜索确认旧变量名在仓库中不再出现。"
+  },
+  {
+    "id": 5,
+    "prompt": "我怀疑文档之间互相矛盾：handoff 说 v2 API 已上线，但 README 还在写 v1。",
+    "expected": "触发 neat-freak。先查证代码与路由/版本现状；再修正文档矛盾。若无法自动判断（例如 v1/v2 都存在且上线状态不明），必须列入“未处理”并向用户提出明确二选一问题。"
+  },
+  {
+    "id": 6,
+    "prompt": "只要把 docs/ 目录整理一下就好，不用管记忆。",
+    "expected": "触发 neat-freak。按照“受众不混”与“平台差异回退”：跳过记忆层，完整盘点并更新 docs/ 与 README/项目根文档；摘要需说明“按用户要求未处理记忆层”。"
+  }
+]
+

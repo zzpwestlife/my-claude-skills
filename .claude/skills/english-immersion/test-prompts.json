@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "english mode on\n---\n(next message) can you help me to understand how work the async function in javascript?",
+    "expected": "Mode switches ON with one-line confirmation. Claude replies in English. Proceeds to explain async functions without correcting the grammar errors inline. Grammar errors ('how work', 'to understand how work') are silently logged to errors_tagged.md for session-end review."
+  },
+  {
+    "id": 2,
+    "prompt": "what does leverage mean in business context? I not sure when to use it",
+    "expected": "Wittgenstein-style explanation: when-you-use-it + concrete sentence + contrast with a similar word. Under 5 sentences. No Chinese translation. Word appended to words_learned.md. Grammar error ('I not sure') logged silently to errors_tagged.md."
+  },
+  {
+    "id": 3,
+    "prompt": "ok that's all for today, bye",
+    "expected": "Session-end review triggered. Errors formatted as: 'English Review — DATE — N errors across M patterns'. Each error shows original → corrected with pattern label and Wittgenstein explanation. If ≥7 days since last weekly report, generate weekly report too."
+  }
+]
