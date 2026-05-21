@@ -74,6 +74,79 @@ python3 scripts/setup_workspace.py --skill-dir assets/example/target_skill --dat
 
 These commands use only the Python standard library. They should not require any repository checkout, package install, or external dependency.
 
+## Degraded Mode (No Dataset)
+
+Enter this mode when Phase 0 finds a valid `SKILL.md` but no dataset directory, or when the user explicitly requests evaluation without data.
+
+Do not enter the Iteration Loop from this mode. Output the score card, surface suggestions, and stop.
+
+### L1 Static Check
+
+Run these checks programmatically (no LLM call):
+
+1. **Frontmatter structure** — `name` and `description` fields must be non-empty.
+2. **Section presence** — at least one workflow or instruction section must exist after the frontmatter.
+3. **Safety scan** — run all 11 rules from `references/safety-rules.md`. Critical (★) findings fail the check immediately; 9 warning-level findings are recorded and reported in the score card.
+
+If either frontmatter or section check fails, stop and report the structural error before running Rubric.
+
+### Built-in Rubric (4 dimensions)
+
+After L1 passes, evaluate the skill with four LLM YES/NO questions. Read the full `SKILL.md` content, then answer each question independently.
+
+| ID | Dimension | Question |
+|----|-----------|----------|
+| D1 | Trigger precision | "Can a reader determine in 5 seconds whether to invoke this skill for a given request, without confusing it with similar skills?" |
+| D2 | Boundary clarity | "Does the skill explicitly state at least one scenario it does NOT handle?" |
+| D3 | Workflow coverage | "Does the workflow or instructions section address all major input types mentioned in the description or trigger?" |
+| D4 | Example quality | "If examples are present, do they include at least one positive (invoke) and one negative (do not invoke) case? If no examples are present, answer NO." |
+
+Each dimension: YES = pass, NO = fail. Score = `passed_count / 4`.
+
+### Score Card Output
+
+Report in this format:
+
+```
+=== Degraded Mode Evaluation ===
+Skill: <name from frontmatter>
+Mode: No dataset — L1 + Rubric only
+
+L1 Static Check
+  structure:  PASS | FAIL — <reason>
+  safety:     PASS | <n> warnings
+
+Rubric
+  D1 trigger precision:  YES | NO
+  D2 boundary clarity:   YES | NO
+  D3 workflow coverage:  YES | NO
+  D4 example quality:    YES | NO
+
+Score: <n>/4 rubric dimensions passed
+
+Suggestions:
+  <one line per NO dimension: what to add or fix>
+
+Safety warnings:
+  <list each warning-level finding with rule ID and description>
+```
+
+For each NO dimension, produce one concrete suggestion:
+- D1 NO → "Tighten the description or add 1–2 specific trigger examples to distinguish this skill from similar ones."
+- D2 NO → "Add a 'Do not use when...' line or sentence to the description or frontmatter."
+- D3 NO → "Identify any input type mentioned in the trigger that has no corresponding handling in the workflow body, and add a handling rule or explicit exclusion."
+- D4 NO → "Add at least one negative example showing a request that should NOT trigger this skill."
+
+### Operator Checkpoint
+
+After the score card is written, pause and present options:
+
+1. Operator edits SKILL.md manually based on suggestions, then re-runs degraded mode to recheck.
+2. Operator provides a dataset directory to unlock full evolution mode.
+3. Operator exits.
+
+Do not proceed to the Iteration Loop under any circumstance from this mode.
+
 ## Iteration Loop
 
 Every iteration must run these phases in this exact order:
