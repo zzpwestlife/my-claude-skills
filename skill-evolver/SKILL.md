@@ -147,6 +147,89 @@ After the score card is written, pause and present options:
 
 Do not proceed to the Iteration Loop under any circumstance from this mode.
 
+## Trace Extraction
+
+Enter this mode when the user pastes a conversation excerpt and asks to extract a trace, or says they want to build a dataset from a conversation.
+
+This mode does not require a dataset to already exist. It creates or appends to one.
+
+### Steps
+
+1. **Identify invocation boundary**
+
+   Locate:
+   - The user message that triggered the skill (this becomes `input`).
+   - The assistant's final response after the skill completed (this becomes `expected_output`).
+
+   If multiple skill invocations are present in the paste, process them one at a time in order.
+
+   If the boundary is ambiguous (e.g. the skill was interrupted mid-execution), ask the user to mark the start and end before proceeding.
+
+2. **Extract fields**
+
+   | Field | Source |
+   |-------|--------|
+   | `id` | Auto-generate: `extracted-<YYYYMMDD>-<n>` where n is a zero-padded counter starting at 001 |
+   | `input` | User message text that triggered the skill |
+   | `expected_output` | Full assistant response, or user-highlighted portion if the user marked a subset |
+   | `skill` | Skill name if identifiable from the conversation context; else ask the user |
+   | `split` | Default `dev`; prompt the user to override to `gt`, `holdout`, or `regression` if appropriate |
+   | `notes` | Empty string by default; user may add annotation |
+
+3. **Show draft and confirm**
+
+   Present the draft in this format before saving anything:
+
+   ```
+   === Extracted Trace Draft ===
+   id:              extracted-<date>-001
+   skill:           <skill name>
+   split:           dev
+   input:
+     <extracted user message>
+   expected_output:
+     <extracted assistant response>
+   notes:           (empty)
+
+   Target dataset dir: <dataset-dir or ask if unknown>
+   Will write:
+     <dataset-dir>/traces/dev-extracted-001.json
+     append to: <dataset-dir>/dev.jsonl
+
+   Confirm? [y = save / n = discard / e = edit fields]
+   ```
+
+   Wait for operator response. If `e`, apply the user's edits and re-show the draft before saving.
+
+4. **Save on confirmation**
+
+   Write the trace file:
+
+   ```json
+   {
+     "id": "extracted-<date>-001",
+     "skill": "<skill name>",
+     "split": "dev",
+     "input": "...",
+     "expected_output": "...",
+     "notes": ""
+   }
+   ```
+
+   Append one index line to `<dataset-dir>/dev.jsonl` (or the split-appropriate `.jsonl`):
+
+   ```jsonl
+   {"id": "extracted-<date>-001", "trace_path": "traces/dev-extracted-001.json", "split": "dev"}
+   ```
+
+   Confirm save with: `Saved: <trace_path>  Appended to: <jsonl_path>`
+
+### Constraints
+
+- Auto-extracted traces default to `dev` split. If the user wants a GT trace, they must explicitly confirm the output is the authoritative correct answer.
+- If the target dataset directory does not exist yet, ask the user to confirm the path before creating it.
+- Do not attempt to scan `~/.claude/` or any log file. Only process text the user explicitly pastes.
+
 ## Iteration Loop
 
 Every iteration must run these phases in this exact order:
