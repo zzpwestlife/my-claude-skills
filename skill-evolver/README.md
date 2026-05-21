@@ -4,6 +4,8 @@ A self-contained bundle for local skill evolution.
 
 `skill-evolver` 用于在本地对目标 `SKILL.md` 做可追溯、可回滚、可验证的迭代优化。它把 skill 优化流程收敛为一套明确协议：先看 trace，再做单一原子 mutation，用分层评测和五维 AND gate 决定 keep / discard / rollback。
 
+> **设计依据**：skill-evolver 的 5 维 AND 门控、3 层评测和 trace 驱动 proposer 协议来自一次 meta-evolution 自证 —— 让该 skill 自己优化自己跑 19 轮、零 rollback，过程中暴露的真问题反过来塑造了 `SKILL.md` 与 `references/` 的当前形态。
+
 ## 核心能力
 
 - **8 阶段循环**
