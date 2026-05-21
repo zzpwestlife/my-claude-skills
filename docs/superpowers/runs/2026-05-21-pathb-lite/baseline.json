@@ -1,0 +1,12 @@
+{
+  "captured_at": "2026-05-21",
+  "target_skill": "target_skill/SKILL.md",
+  "splits": {
+    "gt":          {"cases_total": 1, "cases_passed": 1, "pass_rate": 1.0},
+    "dev":         {"cases_total": 2, "cases_passed": 1, "pass_rate": 0.5},
+    "holdout":     {"cases_total": 1, "cases_passed": 1, "pass_rate": 1.0},
+    "regression":  {"cases_total": 1, "cases_passed": 1, "pass_rate": 1.0}
+  },
+  "failing_cases": ["dev-1"],
+  "notes": "Single failing case (dev-1) — permissions/role/sign-in route missing from target_skill."
+}

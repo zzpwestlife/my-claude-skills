@@ -1,0 +1,39 @@
+{
+  "stop_reason": "iteration_budget_reached",
+  "best_checkpoint": "iter-2",
+  "kept_count": 1,
+  "discarded_count": 1,
+  "rollback_count": 1,
+  "probe_count": 1,
+  "gate_pass_rates": {
+    "structure_and_safety":  {"evals": 2, "pass": 2, "rate": 1.0},
+    "dev_quality":           {"evals": 1, "pass": 1, "rate": 1.0, "notes": "iter-1 not evaluated due to atomic gate short-circuit"},
+    "strict_quality":        {"evals": 1, "pass": 1, "rate": 1.0, "notes": "provisional; L3 not run"},
+    "cost_budget":           {"evals": 0, "pass": 0, "rate": null, "notes": "N/A — session-mode token metering unavailable"},
+    "atomic_auditability":   {"evals": 2, "pass": 1, "rate": 0.5, "notes": "iter-1 deliberate violation by design"}
+  },
+  "dataset_performance": {
+    "dev":        {"cases_total": 2, "cases_passed": 2, "pass_rate": 1.0},
+    "holdout":    {"cases_total": 1, "cases_passed": 1, "pass_rate": 1.0},
+    "regression": {"cases_total": 1, "cases_passed": 1, "pass_rate": 1.0},
+    "gt":         {"cases_total": 1, "cases_passed": 1, "pass_rate": 1.0}
+  },
+  "artifact_locations": {
+    "results_tsv":      "results.tsv",
+    "experiments_jsonl":"experiments.jsonl",
+    "traces_dir":       ".skill_evolve/traces",
+    "iterations_dir":   "iterations",
+    "final_report_json":"final_report.json",
+    "baseline":         "baseline.json",
+    "evolve_plan":      "evolve_plan.md"
+  },
+  "simulations": {
+    "skill_creator_quick_validate": "claude-simulated",
+    "skill_creator_grader":         "claude-simulated",
+    "skill_creator_comparator":     "not run",
+    "agent_traces":                 "stub-only",
+    "eval_repeat_n":                1,
+    "cost_metering":                "unavailable"
+  },
+  "next_recommendation": "If the goal is to validate behavior on real workloads, advance to Path B-Build (expand GT to ~20 cases, add disambiguation around profile/permissions) or Path B-Real (run against a non-toy skill). The toy mechanics dry-run successfully exercised reject+revert, atomic keep, and probe stability."
+}
