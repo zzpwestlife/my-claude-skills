@@ -5,7 +5,6 @@ The distributed zip should unpack to one top-level directory named `skill-evolve
 Required bundle contents:
 
 - `SKILL.md`
-- `agents/openai.yaml`
 - `references/artifacts.md`
 - `references/dataset-format.md`
 - `references/distribution.md`

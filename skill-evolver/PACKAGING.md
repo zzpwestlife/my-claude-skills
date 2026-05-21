@@ -55,7 +55,7 @@ python3 scripts/setup_workspace.py \
 
 ```bash
 zip -r skill-evolver.zip skill-evolver \
-  -x "*.DS_Store" \
+  -x "*.DS_Store" \ 
   -x "*/__pycache__/*" \
   -x "*/.pytest_cache/*" \
   -x "*/.git/*"

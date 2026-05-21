@@ -8,7 +8,6 @@ from typing import Any, Dict, List
 
 REQUIRED_FILES = [
     "SKILL.md",
-    "agents/openai.yaml",
     "references/artifacts.md",
     "references/dataset-format.md",
     "references/distribution.md",
@@ -56,12 +55,6 @@ def check_skill_package(skill_dir: Path) -> Dict[str, Any]:
         for banned in BANNED_SKILL_TEXT:
             if banned in text:
                 errors.append(f"SKILL.md contains repo-specific text: {banned}")
-
-    metadata = skill_dir / "agents" / "openai.yaml"
-    if metadata.exists():
-        metadata_text = metadata.read_text(encoding="utf-8")
-        if "$skill-evolver" not in metadata_text:
-            errors.append("agents/openai.yaml default prompt must mention `$skill-evolver`")
 
     for script in (skill_dir / "scripts").glob("*.py") if (skill_dir / "scripts").exists() else []:
         script_text = script.read_text(encoding="utf-8")
