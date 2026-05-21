@@ -1,0 +1,6 @@
+interface:
+  display_name: "Skill Evolver"
+  short_description: "Local skill self-evolution with trace gates and rollback"
+  default_prompt: "Use $skill-evolver to improve this local skill against its dev, holdout, and regression datasets."
+policy:
+  allow_implicit_invocation: true

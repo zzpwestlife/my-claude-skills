@@ -1,0 +1,7 @@
+{
+  "case_id": "holdout-1",
+  "input": "My permissions changed and I lost access.",
+  "actual": "docs/access.md",
+  "expected": "docs/access.md",
+  "notes": "Holdout access case should remain hidden until strict evaluation."
+}

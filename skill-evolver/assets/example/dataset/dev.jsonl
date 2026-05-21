@@ -1,0 +1,2 @@
+{"id":"dev-1","input":"I cannot sign in after the admin changed my role.","expected":"docs/access.md","actual":"docs/account.md","trace":"traces/dev-1.json","assertions":[{"type":"contains","value":"docs/access.md"}]}
+{"id":"dev-2","input":"Where do I download my invoice?","expected":"docs/billing.md","actual":"docs/billing.md","trace":"traces/dev-2.json","assertions":[{"type":"contains","value":"docs/billing.md"}]}

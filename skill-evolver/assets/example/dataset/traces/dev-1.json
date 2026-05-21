@@ -1,0 +1,8 @@
+{
+  "case_id": "dev-1",
+  "input": "I cannot sign in after the admin changed my role.",
+  "actual": "docs/account.md",
+  "expected": "docs/access.md",
+  "failure_reason": "The route treated role and admin wording as account profile language instead of access and permissions language.",
+  "expected_fix": "Add a trigger hint that sign-in, role, permission, and admin access issues route to docs/access.md."
+}

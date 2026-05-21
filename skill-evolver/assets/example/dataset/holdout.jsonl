@@ -1,0 +1,1 @@
+{"id":"holdout-1","input":"My permissions changed and I lost access.","expected":"docs/access.md","actual":"docs/access.md","trace":"traces/holdout-1.json","assertions":[{"type":"contains","value":"docs/access.md"}]}

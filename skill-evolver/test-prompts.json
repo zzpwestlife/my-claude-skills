@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "setup-plan",
+    "prompt": "请用 skill-evolver 为一个本地 skill 制定一次完整 evolution run。已知目标 skill 路径、dataset 路径、output 路径都存在；请输出 Phase 0 需要产出的 baseline / evolve_plan / workspace 结构，并说明 L1/L2/L3 如何触发。",
+    "expected": "应给出明确的 Phase 0 产物、workspace / artifact 结构，以及 L1/L2/L3 触发条件与顺序。"
+  },
+  {
+    "id": 2,
+    "name": "trace-diagnosis",
+    "prompt": "某轮 dev eval 中，case 41 失败；trace 显示 agent 把‘员工离职后邮箱还在不在’路由到了邮箱分类，但 GT 指向通讯录/删除或禁用成员。请按 skill-evolver 的协议给出唯一 mutation proposal，必须包含 case_id、trace_path、failure_reason、expected_fix、target_layer、target_scope、target_files。",
+    "expected": "应输出唯一且原子化的 mutation proposal，严格包含指定字段，并基于 trace 证据做诊断。"
+  },
+  {
+    "id": 3,
+    "name": "gate-rollback",
+    "prompt": "某轮修改后 L1 和 L2 通过，但 strict eval 回归集掉了 2 个 case，且 token 成本超预算 18%。请按 skill-evolver 的 Gate + Loop 规则判断 keep 还是 discard，并说明应该记录哪些 artifacts、是否 rollback、下一轮走哪条路径。",
+    "expected": "应依据五维 AND gate 判定 discard，说明 rollback、记录 artifacts，并给出下一轮 loop 决策。"
+  }
+]

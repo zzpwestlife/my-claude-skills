@@ -1,0 +1,7 @@
+{
+  "case_id": "dev-2",
+  "input": "Where do I download my invoice?",
+  "actual": "docs/billing.md",
+  "expected": "docs/billing.md",
+  "notes": "Passing dev case used as regression guard."
+}

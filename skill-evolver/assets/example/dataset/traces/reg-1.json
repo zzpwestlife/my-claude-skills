@@ -1,0 +1,7 @@
+{
+  "case_id": "reg-1",
+  "input": "How do I change my account email?",
+  "actual": "docs/account.md",
+  "expected": "docs/account.md",
+  "notes": "Regression account case should not be broken by access routing changes."
+}

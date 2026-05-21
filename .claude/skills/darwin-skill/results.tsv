@@ -1,4 +1,13 @@
 timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-05-20	baseline	skill-evolver	-	70.7	baseline	-	Initial evaluation: D1=4.8 D2=12.8 D3=6.0 D4=2.1 D5=12.0 D6=4.3 D7=11.3 D8=17.5	full_test
+2026-05-20	round1	skill-evolver	70.7	80.4	keep	检查点设计+边界条件+Frontmatter (D4/D3/D1)	Add operator checkpoints and downgrade routes; measured score increased	full_test
+2026-05-20	round2	skill-evolver	80.4	84.3	keep	指令具体性+整体架构+实测表现 (D5/D7/D8)	Define default five-gate thresholds and missing-data rule; ambiguity reduced	full_test
+2026-05-20	round3	skill-evolver	84.3	87.4	keep	评测层细则+断言分类+实测表现 (D5/D7/D8)	Inline L1/L2/L3 defaults and 8-assertion taxonomy; layer behavior became more concrete	full_test
+2026-05-20	round4	skill-evolver	87.4	89.4	keep	Review 信号包+阈值+实测表现 (D5/D7/D8)	Add structured review signal pack and default extraction thresholds; review became operational	full_test
+2026-05-20	round5	skill-evolver	89.4	90.8	keep	反事实诊断模板+实测表现 (D5/D7/D8)	Add mandatory counterfactual field and discard-if-cannot-write rule; ideate became more causal	full_test
+2026-05-20	round6	skill-evolver	90.8	92.5	keep	Loop 升级规则+Stop 结构+实测表现 (D5/D7/D8)	Define no-keep threshold, exhausted test, aggressive checkpoint, and final_report minimum schema	full_test
+2026-05-20	round7	skill-evolver	92.5	93.3	keep	Aggressive strategy defaults+嵌套报告结构 (D7/D8)	Define aggressive-strategy defaults and explicit nested final_report fields; evaluator pressure behavior became more consistent	full_test
+2026-05-20	round8	skill-evolver	93.3	93.4	keep	Artifacts contract 对齐 (D6)	Align references/artifacts.md final_report schema with SKILL.md to remove bundle-internal contract drift	full_test
 2026-04-20	baseline	ielts	-	67.0	baseline	-	Initial evaluation	dry_run
 2026-04-20	efcf834	ielts	67.0	70.1	keep	Frontmatter质量 (D1)	Added name/description/trigger words frontmatter block	dry_run
 2026-04-20	604e128	ielts	70.1	83.6	keep	边界条件+指令具体性+实测表现 (D3/D5/D8)	Edge cases for feed + Modify flow + section inference + ielts_vocab schema	dry_run
