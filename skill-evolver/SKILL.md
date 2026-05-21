@@ -1,6 +1,6 @@
 ---
 name: skill-evolver
-description: Use when evolving or evaluating a local skill with GT/dev/holdout/regression data. Do not use when the user only wants dataset validation, package smoke checks, or a one-off review with no iteration loop. Example: improve a skill against dev and holdout splits; self-iterate a skill with trace-driven rollback.
+description: Use when evolving a skill with a dataset (full mode); evaluating a skill without a dataset (degraded mode, L1 + Rubric only); or extracting conversation traces into a dataset (trace extraction mode). Do not use when the user only wants dataset validation, package smoke checks, or a one-off review with no iteration loop.
 ---
 
 # Skill Evolver
@@ -9,7 +9,7 @@ Use this skill to evolve a local skill against local evaluation data. This bundl
 
 Before modifying anything, inspect the target skill, dataset, output directory, and existing artifacts. If a target skill path, dataset path, or output directory is missing and cannot be inferred from the user request, ask for it.
 
-If the user only wants dataset validation, run `python3 scripts/validate_dataset.py <dataset-dir> --json` and stop after reporting the result. If the user only wants a package or zip smoke check, run the bundle checks and stop after reporting the result. If the user only wants a one-off quality review with no iterative mutation loop, provide an evaluation summary and proposed next mutations, but do not enter Modify/Commit/Verify.
+If the user only wants dataset validation, run `python3 scripts/validate_dataset.py <dataset-dir> --json` and stop after reporting the result. If the user only wants a package or zip smoke check, run the bundle checks and stop after reporting the result. If the user only wants a one-off quality review with no iterative mutation loop, provide an evaluation summary and proposed next mutations, but do not enter Modify/Commit/Verify. If the user provides a skill directory but no dataset, or explicitly requests evaluation without data, enter Degraded Mode (see below). If the user pastes a conversation excerpt and asks to extract a trace, enter Trace Extraction (see below).
 
 ## Inputs
 
