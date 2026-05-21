@@ -26,6 +26,11 @@ Useful references:
 - Distribution checks: read `references/distribution.md` when packaging or validating a zip bundle.
 - Full local run sequence: read `references/runbook.md` when the user asks to run a complete evolution session.
 
+## Dependencies
+
+- **skill-creator** — hard dependency. Phase 0 baseline, L1 `quick_validate`, L2 `grader`, L3 `comparator`, and optional GT generation all rely on it. If skill-creator is unavailable, stop and surface the gap; do not attempt manual fallbacks for these capabilities.
+- **git** — preferred for checkpointing and rollback. When unavailable, fall back to reversible file snapshots (Commit phase records the snapshot path as the checkpoint).
+
 ## Phase 0: Setup
 
 Run setup once per evolution run.
@@ -150,7 +155,7 @@ Keep the mutation only if all five dimensions pass. Use these defaults unless `e
 - `dev_quality`: pass only when L2 pass rate is not lower than the current kept checkpoint and there are zero new dev regressions.
 - `strict_quality`: when L3 runs, pass only when regression failures stay at zero and holdout pass rate is not lower than the current kept checkpoint. When L3 does not run for this iteration, treat `strict_quality` as pass for same-layer provisional keeps, but require a real L3 pass before layer promotion or finalization.
 - `cost_budget`: pass only when total token cost is less than or equal to 110% of the current kept checkpoint unless `evolve_plan.md` sets a tighter budget.
-- `atomic_auditability`: pass only when the mutation stays within one declared layer, touches no more than one file unless `target_files` explicitly allowed a pattern, and the iteration summary, traces, and checkpoint path are all present.
+- `atomic_auditability`: pass only when the mutation stays within one declared layer, touches no more than one file by default — up to 5 files when `target_files` explicitly declares a pattern (e.g. all warning rules in `references/safety-rules.md`) — and the iteration summary, traces, and checkpoint path are all present.
 
 This is an AND gate, not a weighted score. Any false dimension means discard and rollback. Missing data is false, except the provisional `strict_quality` case above.
 
@@ -191,31 +196,31 @@ When all lower layers are exhausted, the next higher layer becomes eligible. Do 
 
 ## Mutation Layers
 
-Do not cross layers in a single iteration.
+Each iteration mutates exactly one layer:
 
-Layer 1 is low-cost trigger and routing work. It may edit only the target skill's trigger rules, invocation boundaries, routing hints, short examples, or compact usage guards inside `SKILL.md`.
+- **Layer 1** — `SKILL.md` trigger rules, invocation boundaries, routing hints, short examples, compact usage guards.
+- **Layer 2** — `SKILL.md` substantive workflow instructions, examples, refusal behavior, failure handling, decision policy.
+- **Layer 3** — `scripts/*`, `references/*`, dataset adapters, bundled helper resources.
 
-Layer 2 is medium-cost skill body work. It may edit substantive workflow instructions, examples, refusal behavior, failure handling, or decision policy inside `SKILL.md`.
-
-Layer 3 is high-cost support material work. It may edit only `scripts/*`, `references/*`, dataset adapters, or other bundled helper resources. Use Layer 3 only after lower layers are exhausted or trace evidence proves the failure lives in helper material.
+Do not cross layers in a single iteration. For full layer definitions, escalation rules, exhaustion criteria, and atomic-file enforcement, read `references/mutation-layers.md`.
 
 ## Evaluation Layers
 
-L1 quick guard is programmatic and cheap. Check `SKILL.md` structure, required metadata, dangerous shell commands, hardcoded API keys, unsafe absolute paths, broad destructive operations, and a small GT smoke sample. Treat any critical safety finding as immediate fail.
+Three cost-ascending tiers gate every iteration:
 
-L2 dev eval runs the dev split case by case. Record `id`, `input`, `actual output`, `expected output`, `assertion results`, `pass/fail`, `score`, and `trace path` for every case. Use this default assertion taxonomy unless the dataset defines a narrower set:
+- **L1 quick guard** — programmatic; always runs; immediate fail on any critical (★) safety finding.
+- **L2 dev eval** — runs after L1 passes; full dev split case-by-case using the assertion taxonomy.
+- **L3 strict eval** — conditional; covers `holdout` and `regression`; runs every 3 iterations, when dev pass-rate ≥ 0.90, before any layer promotion, and before final validation.
 
-- Programmatic assertions: `contains`, `not_contains`, `regex`, `path_hit`, `json_field`, `script_check`
-- Bounded LLM yes/no assertions: `fact_coverage`, `llm_judge`
+For the full L1 four-step procedure, the L2 assertion taxonomy (8 default assertions: 6 programmatic, 2 bounded LLM YES/NO), L3 trigger details, and the optional blind A/B comparator, read `references/evaluation-layers.md`.
 
-L3 strict eval runs only on trigger conditions. Use these defaults unless `evolve_plan.md` defines stricter triggers:
+## Eval Noise Mitigation
 
-- run every 3 iterations
-- run when dev pass rate reaches 0.90 or higher
-- run before any layer promotion
-- run before final validation or finalization
+LLM-judged metrics drift across runs. Repeat every gate-crossing L2/L3 evaluation **N = 3** times (configurable via `eval.repeat_n` in `evolve_plan.md`); aggregate by median; record min/max/per-run scores and flag `noisy: true` when max − min > 0.05. Re-eval when keep/discard margin falls below the noise threshold or when the proposer's predicted jump diverges from observed. Full protocol in `references/eval-noise.md`.
 
-L3 covers holdout and regression whenever those datasets exist. Add optional blind A/B comparison only when the user or `evolve_plan.md` explicitly requests it.
+## Safety Rules
+
+L1 quick guard scans 11 safety rules — 2 critical (★) cause immediate L1 fail; 9 warnings are recorded into the iteration's findings buffer for the next Review. Full rule list with detect / level / fix is in `references/safety-rules.md`.
 
 ## Stop Rules
 
