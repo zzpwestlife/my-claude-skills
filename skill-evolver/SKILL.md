@@ -13,10 +13,10 @@ If the user only wants dataset validation, run `python3 scripts/validate_dataset
 
 ## Inputs
 
-Required:
+Required (full evolution mode):
 
 - Target skill directory containing `SKILL.md`.
-- Dataset directory with GT/dev data and, when available, holdout/regression data.
+- Dataset directory with GT/dev data and, when available, holdout/regression data. If no dataset is provided, the skill enters Degraded Mode (see below) and performs static evaluation only.
 - Output directory for workspace copies and audit artifacts.
 
 Useful references:
