@@ -1,7 +1,0 @@
-{
-  "case_id": "gt-1",
-  "input": "Where can I update my profile name?",
-  "actual": "docs/account.md",
-  "expected": "docs/account.md",
-  "notes": "Baseline smoke case passes."
-}
